@@ -40,6 +40,18 @@ function defaultArray(a,x,y,startX,startY) {
     a[startX][startY]=1;
 }
 
+
+function defaultArraysss(a,x,y) {
+    for(var h=0;h<x;h++){
+        for(var k=0;k<y;k++){
+            a[h][k]=-1;
+
+        }
+    }
+
+}
+
+
 function isSafe(x,y,nextX,nextY) {
     return nextX >= 0 && nextY >= 0 && nextX <= x - 1 && nextY <= y - 1;
 }

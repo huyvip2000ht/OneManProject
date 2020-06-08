@@ -47,6 +47,13 @@ class scene1 extends Phaser.Scene {
 
 
         dfs(a,x,y,randomX,randomY,1);
+        for(let h=0;h<x;h++){
+            for(let k=0;k<y;k++){
+                //console.log('a['+h+']['+k+']='+a[h][k]);
+
+                console.log('a['+h+']['+k+']='+a[h][k]);
+            }
+        }
 
         for(let h=0;h<x;h++){
             for(let k=0;k<y;k++){
@@ -65,6 +72,11 @@ class scene1 extends Phaser.Scene {
         let previousX;
         let previousY;
 
+        let wentThrough=createArray(50,2);
+        defaultArraysss(wentThrough,50,2);
+        let indexX=0;
+        let pickedWord;
+
         for(let h=0;h<x;h++){
             for(let k=0;k<y;k++){
 
@@ -72,6 +84,9 @@ class scene1 extends Phaser.Scene {
                 boxes[h][k].setInteractive();
                 boxes[h][k].on('pointerdown', function (pointer)
                 {
+                    pickedWord='';
+                    defaultArraysss(wentThrough,50,2);
+                    indexX=0;
                     isPointerDown=true;
                     randomTint=Math.random() * 16000000;
 
@@ -86,6 +101,12 @@ class scene1 extends Phaser.Scene {
                             boxes[h][k].clearTint();
                         }
                     }
+
+
+                    for(var m=0;m<indexX;m++){
+                        pickedWord= pickedWord +  a[wentThrough[m][0]][wentThrough[m][1]];
+                    }
+                    console.log("cac chu cai duoc chon la: "+pickedWord);
                     /////////////////////
 
                 }, this);
@@ -93,9 +114,49 @@ class scene1 extends Phaser.Scene {
                 boxes[h][k].on('pointermove', function (pointer)
                 {
                     if(isPointerDown) {
-                        if(isCloseTo(////////////////////////////////////////////////////////////////))
+                       // if(isCloseTo(////////////////////////////////////////////////////////////////))
 
                         boxes[h][k].setTint(randomTint);
+                     //   console.log('h ='+h+', k = '+k);
+
+                        if(indexX===0){     // số đầu tiên
+                            wentThrough[indexX][0]=h;
+                            wentThrough[indexX][1]=k;
+                            console.log('wentThrough['+indexX+'][0] = '+ h + ' , '+
+                                'wentThrough['+indexX+'][1] = '+ k);
+                            indexX++;
+                        }
+                        else if(indexX>=2)      // từ số thứ 2 trở lên có tính năng lùi lại
+                            if(wentThrough[indexX-2][0]===h && wentThrough[indexX-2][1]===k){
+                                indexX--;
+                                boxes[wentThrough[indexX][0]][wentThrough[indexX][1]].clearTint();
+                                wentThrough[indexX][0]=-1;
+                                wentThrough[indexX][1]=-1;
+
+                                console.log('delete wentThrough['+indexX+'][0] = '+ h + ' , '+
+                                    'wentThrough['+indexX+'][1] = '+ k);
+
+                            }
+
+                        if(wentThrough[indexX-1][0]!==h || wentThrough[indexX-1][1]!==k){   // tính năng bôi đen các số
+                            var duplicate=false;
+                            for(var temp=0;temp<indexX;temp++){
+                                if(wentThrough[temp][0]===h && wentThrough[temp][1]===k){
+                                    duplicate=true;
+
+                                }
+                            }
+
+                            if(!duplicate) {
+                                wentThrough[indexX][0] = h;
+                                wentThrough[indexX][1] = k;
+                                console.log('wentThrough[' + indexX + '][0] = ' + h + ' , ' +
+                                    'wentThrough[' + indexX + '][1] = ' + k);
+                                indexX++;
+                            }
+                            else console.log("Duplicate !");
+
+                        }
 
 
 
@@ -115,7 +176,8 @@ class scene1 extends Phaser.Scene {
     }
 
     isCloseTo(previousX,previousY,nowX,nowY){
-        return ((Math.abs(previousX-nowX)===1&&Math.abs(previousY-nowY)===0)||(Math.abs(previousX-nowX)===0&&Math.abs(previousY-nowY)===1));
+        return ((Math.abs(previousX-nowX)===1&&Math.abs(previousY-nowY)===0)
+            || (Math.abs(previousX-nowX)===0&&Math.abs(previousY-nowY)===1));
     }
 
     update ()

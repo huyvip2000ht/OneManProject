@@ -13,7 +13,7 @@ class loadingScene extends Phaser.Scene{
         this.load.image("canvas",'assets/canvas.png');
 
         for(var i=0;i<26;i++){
-            console.log(String.fromCharCode(97 + i));
+         //   console.log(String.fromCharCode(97 + i));
             this.load.image(String.fromCharCode(97 + i),"assets/alphabet/"+String.fromCharCode(97 + i)+".png");
         }
 
